@@ -39,6 +39,13 @@
 -include_lib("eunit/include/eunit.hrl").
 -endif.
 
+-ifdef(OTP_RELEASE). %% this implies 21 or higher
+-define(EXCEPTION(Class, Reason, Stacktrace), Class:Reason:Stacktrace).
+-define(GET_STACK(Stacktrace), Stacktrace).
+-else.
+-define(EXCEPTION(Class, Reason, _), Class:Reason).
+-define(GET_STACK(_), erlang:get_stacktrace()).
+-endif.
 
 %%% ##Data Structures
 %%%
@@ -1606,9 +1613,9 @@ type_modules(Mods) ->
             %% not the `badmatch` itself:
             error:{badmatch, {error, _}=Err} ->
                 exit(Err);
-            E:T ->
+            ?EXCEPTION(E, T, Stacktrace) ->
                 io:format("alpaca_typer:type_modules/2 crashed with ~p:~p~n"
-                          "Stacktrace:~n~p~n", [E, T, erlang:get_stacktrace()]),
+                          "Stacktrace:~n~p~n", [E, T, ?GET_STACK(Stacktrace)]),
                 exit({error, T})
         end
     end),

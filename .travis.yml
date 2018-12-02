@@ -1,11 +1,12 @@
 language: erlang
 install: 'true'
 otp_release:
+- 21.1.3
 - 20.0
 - 19.3
 env:
   global:
-  - REBAR_VSN=3.4.3
+  - REBAR_VSN=3.7.5
   - PATH=./rebar3-$REBAR_VSN:$PATH
   - ALPACA_VERSION_TO_USE=v0.2.8
   - ALPACA_BASE_URL=https://github.com/alpaca-lang/alpaca/releases/download/$ALPACA_VERSION_TO_USE
